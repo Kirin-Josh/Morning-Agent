@@ -1,4 +1,5 @@
 import datetime
+import json
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -8,17 +9,12 @@ import os
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 def get_calendar_service():
-    creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
+    token_data = os.getenv("GOOGLE_TOKEN")
+    creds = Credentials.from_authorized_user_info(
+        json.loads(token_data), SCOPES
+    )
+    if creds.expired and creds.refresh_token:
+        creds.refresh(Request())
     return build('calendar', 'v3', credentials=creds)
 
 def get_todays_events():
@@ -63,7 +59,3 @@ if __name__ == '__main__':
         page_token = response.get('nextPageToken')
         if not page_token:
             break
-
-    print("\nYour calendars:")
-    for cal in calendars:
-        print(f"• {cal['summary']}")
