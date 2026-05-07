@@ -57,10 +57,10 @@ async def build_briefing_message():
 
     prs = get_pull_requests()
     pr_label = f"{len(prs)} open" if prs else "none"
-    pr_text += f"  · <a href='{pr['url']}'>{html.escape(pr['title'])}</a> <i>({html.escape(pr['repo'])})</i>\n"
+    pr_text = f"🔀 <b>Open Pull Requests</b> — <i>{pr_label}</i>\n"
     if prs:
         for pr in prs:
-            pr_text += f"  · {escape_md(pr['title'])} <i>({escape_md(pr['repo'])})</i>\n"
+            pr_text += f"  · <a href='{pr['url']}'>{html.escape(pr['title'])}</a> <i>({html.escape(pr['repo'])})</i>\n"
     else:
         pr_text += "  <i>No open PRs</i> 🎯\n"
 
