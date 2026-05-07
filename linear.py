@@ -22,17 +22,19 @@ query = """
 }
 """
 
-response = httpx.post(
-    "https://api.linear.app/graphql",
-    headers={"Authorization": LINEAR_API_KEY},
-    json={"query": query}
-)
-
-data = response.json()
-issues = data["data"]["viewer"]["assignedIssues"]["nodes"]
-
-for issue in issues:
-    print(f"• {issue['title']} — {issue['state']['name']}")
-    
 def get_linear_issues():
-    return issues
+    response = httpx.post(
+        "https://api.linear.app/graphql",
+        headers={"Authorization": LINEAR_API_KEY},
+        json={"query": query}
+    )
+    data = response.json()
+    issues = data["data"]["viewer"]["assignedIssues"]["nodes"]
+    
+    # Priority: 1=Urgent, 2=High, 3=Medium, 4=Low, 0=No priority
+    # Sort so urgent (1) comes first, no priority (0) comes last
+    def priority_order(issue):
+        p = issue.get("priority", 0)
+        return 999 if p == 0 else p
+    
+    return sorted(issues, key=priority_order)
