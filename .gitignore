@@ -3,5 +3,5 @@ venv/
 credentials.json
 token.json
 nssm.exe**
-tokens/*
+tokens/
 members.json
