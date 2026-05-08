@@ -7,7 +7,7 @@ from telegram import Bot
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from github_service import get_pull_requests
-from linear import get_linear_issues
+from linear_service import get_linear_issues
 from calendar_service import get_todays_events
 from ai_service import ask_ai
 

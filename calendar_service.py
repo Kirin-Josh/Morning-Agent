@@ -12,10 +12,11 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
-def get_calendar_service():
-    token_path = os.path.join(BASE_DIR, 'token.json')
-    creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-    
+def get_calendar_service(token_path=None):
+    path = token_path or os.path.join(BASE_DIR, 'token.json')
+    creds = Credentials.from_authorized_user_file(path, SCOPES)
+    if creds.expired and creds.refresh_token:
+        creds.refresh(Request())
     return build('calendar', 'v3', credentials=creds)
 # def get_calendar_service():
 #     creds = None
@@ -34,8 +35,8 @@ def get_calendar_service():
 #             token.write(creds.to_json())
 #     return build('calendar', 'v3', credentials=creds)
 
-def get_todays_events():
-    service = get_calendar_service()
+def get_todays_events(token_path=None):
+    service = get_calendar_service(token_path=token_path)
     now = datetime.datetime.utcnow()
     start = now.replace(hour=0, minute=0, second=0).isoformat() + 'Z'
     end = now.replace(hour=23, minute=59, second=59).isoformat() + 'Z'

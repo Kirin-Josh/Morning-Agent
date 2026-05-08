@@ -8,15 +8,15 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_USERNAME = os.getenv("GITHUB_USERNAME")
 
-def get_pull_requests():
+def get_pull_requests(username=None):
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Accept": "application/vnd.github+json"
     }
 
-    # PRs assigned to you or created by you
+    user = username or GITHUB_USERNAME
     response = httpx.get(
-        f"https://api.github.com/search/issues?q=is:pr+is:open+involves:{GITHUB_USERNAME}",
+        f"https://api.github.com/search/issues?q=is:pr+is:open+involves:{user}",
         headers=headers
     )
 
