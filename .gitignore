@@ -4,4 +4,5 @@ credentials.json
 token.json
 nssm.exe**
 tokens/
-members.json
+members.json**
+requirements.txt

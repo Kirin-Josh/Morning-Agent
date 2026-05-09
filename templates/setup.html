@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning Briefing — Team Setup</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .card h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 0.4rem;
+    }
+
+    .card p.subtitle {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .field {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.4rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #111;
+      background: #fafafa;
+      transition: border-color 0.15s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #4285f4;
+      background: #fff;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      padding-right: 2rem;
+      cursor: pointer;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1.5rem;
+      background: #4285f4;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn:hover { background: #3367d6; }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Morning Briefing Setup</h1>
+    <p class="subtitle">Connect your accounts to receive personalised daily briefings.</p>
+
+    <form action="/oauth/start" method="post">
+
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+      </div>
+
+      <div class="field">
+        <label for="slack_id">Slack Member ID</label>
+        <input type="text" id="slack_id" name="slack_id" placeholder="U01ABCXYZ" required>
+      </div>
+
+      <div class="field">
+        <label for="linear_key">Linear API Key</label>
+        <input type="text" id="linear_key" name="linear_key" placeholder="lin_api_..." required>
+      </div>
+
+      <div class="field">
+        <label for="github_username">GitHub Username</label>
+        <input type="text" id="github_username" name="github_username" placeholder="octocat" required>
+      </div>
+
+      <div class="field">
+        <label for="role">Role</label>
+        <select id="role" name="role" required>
+          <option value="" disabled selected>Select your role…</option>
+          <option value="developer">Developer</option>
+          <option value="qa">QA</option>
+          <option value="po">Product Owner</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 22q-2.05 0-3.875-.788-1.825-.787-3.188-2.15-1.362-1.362-2.15-3.187Q2 14.05 2 12q0-2.075.788-3.888.787-1.812 2.15-3.174Q6.3 3.575 8.125 2.787 9.95 2 12 2q2.075 0 3.888.787 1.812.788 3.174 2.151 1.363 1.362 2.151 3.174Q22 9.925 22 12q0 2.05-.787 3.875-.788 1.825-2.151 3.188-1.362 1.362-3.174 2.15Q14.075 22 12 22zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4 8.65 4 6.325 6.325 4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20zm-1-5h2v-4h3l-4-4-4 4h3z"/>
+        </svg>
+        Connect Google Calendar
+      </button>
+
+    </form>
+  </div>
+</body>
+</html>
