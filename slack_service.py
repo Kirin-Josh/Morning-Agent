@@ -14,5 +14,5 @@ def send_slack_dm(slack_id: str, message: str):
     )
 
 if __name__ == '__main__':
-    send_slack_dm("U08MCL6RB2M", "👋 Morning Agent is connected to Slack!")
+    send_slack_dm("YOUR_SLACK_ID", "👋 Morning Agent is connected to Slack!")
     print("Slack DM sent successfully!")
