@@ -164,6 +164,7 @@ async def post_init(application):
     scheduler.add_job(
         send_scheduled_briefing,
         trigger='cron',
+        day_of_week='mon-fri',
         hour=7,
         minute=0,
         args=[application.bot]

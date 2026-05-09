@@ -61,27 +61,62 @@ def build_member_briefing(member: dict) -> str:
         f"_Make it count today! 💪_"
     )
 
+def send_team_summary():
+    with open(os.path.join(BASE_DIR, 'members.json')) as f:
+        members = json.load(f)
+
+    now = datetime.now()
+    date_str = now.strftime(f"%A, %B {now.day}")
+    
+    summary = f"🌅 *Team Briefing — {date_str}*\n"
+    summary += "━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+    for member in members:
+        try:
+            issues = get_linear_issues(api_key=member["linear_key"])
+            in_progress = [i for i in issues if i['state']['name'] == 'In Progress']
+            todo = [i for i in issues if i['state']['name'] == 'Todo']
+            prs = get_pull_requests(username=member["github_username"])
+
+            summary += f"*{member['name']}* — _{member['role'].upper()}_\n"
+            
+            if in_progress:
+                summary += f"  🔨 In Progress: {', '.join([i['title'] for i in in_progress[:2]])}\n"
+            if todo:
+                summary += f"  📋 Todo: {len(todo)} task{'s' if len(todo) > 1 else ''}\n"
+            if prs:
+                summary += f"  🔀 PRs: {len(prs)} open\n"
+            
+            summary += "\n"
+        except Exception as e:
+            summary += f"*{member['name']}* — ⚠️ Could not fetch data\n\n"
+
+    client.chat_postMessage(
+        channel=os.getenv("SLACK_CHANNEL_ID"),
+        text=summary,
+        mrkdwn=True
+    )
+    print("✅ Team summary sent to channel")
+
 def send_all_briefings():
+    # Send personal briefings
     with open(os.path.join(BASE_DIR, 'members.json')) as f:
         members = json.load(f)
 
     for member in members:
         try:
-            print(f"Fetching Linear for {member['name']}...")
-            issues = get_linear_issues(api_key=member["linear_key"])
-            print(f"Got {len(issues)} issues")
-            
-            print(f"Fetching Calendar...")
-            events = get_todays_events(token_path=os.path.join(BASE_DIR, member["google_token_path"]))
-            print(f"Got {len(events)} events")
-            
             message = build_member_briefing(member)
-            client.chat_postMessage(channel=member["slack_id"], text=message, mrkdwn=True)
+            client.chat_postMessage(
+                channel=member["slack_id"],
+                text=message,
+                mrkdwn=True
+            )
             print(f"✅ Sent briefing to {member['name']}")
         except Exception as e:
-            import traceback
-            traceback.print_exc()
             print(f"❌ Failed for {member['name']}: {e}")
+
+    # Send team summary to global channel
+    send_team_summary()
 
 def start_scheduler():
     scheduler = AsyncIOScheduler(timezone="Africa/Douala")
