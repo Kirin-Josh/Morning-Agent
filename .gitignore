@@ -5,4 +5,4 @@ token.json
 nssm.exe**
 tokens/
 members.json**
-requirements.txt
+logs/
